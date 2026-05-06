@@ -1,0 +1,91 @@
+services:
+  mysql:
+    image: mysql:8.4
+    platform: linux/amd64
+    container_name: gomind-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: GoMind
+      MYSQL_ROOT_HOST: "%"
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p123456 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis/redis-stack-server:latest
+    container_name: gomind-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: gomind-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: 123456
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gomind-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/config.docker.toml:/app/config/config.toml:ro
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_MODEL_NAME: ${GEMINI_MODEL_NAME:-gemini-1.5-flash}
+
+  frontend:
+    build:
+      context: ./vue-frontend
+      dockerfile: Dockerfile
+    container_name: gomind-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VUE_APP_API_PROXY_TARGET: http://backend:9090
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql_data:
+  redis_data:
+  rabbitmq_data:

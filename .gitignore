@@ -1,0 +1,28 @@
+# 核心：API 密钥、环境变量、配置文件（绝对不上传）
+.env
+.env.*
+config/
+config/*.yml
+config/*.yaml
+config/*.properties
+application.yml
+application.yaml
+application.properties
+
+# IDE 配置文件
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# 项目编译输出
+target/
+build/
+*.jar
+*.war
+*.ear
+
+# 系统文件
+.DS_Store
+*.log
