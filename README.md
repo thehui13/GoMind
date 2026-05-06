@@ -95,5 +95,4 @@ GoMind 是一款基于全栈技术构建的 AI 对话应用程序。它提供了
 
 MIT License.
 =======
-# GoMind
->>>>>>> ec29ef44ad9ab77a8079784fd1d0e78260dda46c
+
