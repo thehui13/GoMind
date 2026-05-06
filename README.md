@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # GoMind
 
 GoMind 是一款基于全栈技术构建的 AI 对话应用程序。它提供了现代化的用户界面（Vue 3 + Element Plus）以及高性能的后端服务（Go + Gin），支持与多种主流 LLM（大语言模型，如 Gemini、OpenAI、Ollama 等）进行交互，并内置 RAG（检索增强生成）能力，旨在为用户提供快速、智能且具有长期记忆的对话体验。
@@ -85,7 +86,6 @@ GoMind 是一款基于全栈技术构建的 AI 对话应用程序。它提供了
 - **\[mysqlConfig] / \[redisConfig] / \[rabbitmqConfig]**: 配置各中间件连接的凭证及端口。
 - **\[jwtConfig]**: 配置鉴权过期时间及秘钥。
 - **\[ragModelConfig]**: RAG 配置核心。定义 embedding 模型类型（如 ark, openai）、维度 (dimension) 和本地文档扫描目录 (docDir)。
-- **\[voiceServiceConfig]**: （可选）语音服务配置（如百度语音 API 相关 Key）。
 
 ## 🤝 贡献指南
 
@@ -94,3 +94,6 @@ GoMind 是一款基于全栈技术构建的 AI 对话应用程序。它提供了
 ## 📄 开源协议
 
 MIT License.
+=======
+# GoMind
+>>>>>>> ec29ef44ad9ab77a8079784fd1d0e78260dda46c
